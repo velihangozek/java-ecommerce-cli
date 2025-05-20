@@ -2,13 +2,15 @@ package org.velihangozek.javaecommercecli.model;
 
 import java.math.BigDecimal;
 
-public class Product extends BaseModel{
+public class Product extends BaseModel {
     private String name;
     private BigDecimal price;
     private int stock;
     private Category category;
 
-    public Product() {}
+
+    public Product() {
+    }
 
     public Product(String name, BigDecimal price, int stock, Category category) {
         this.name = name;

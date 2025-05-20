@@ -12,9 +12,10 @@ public class CustomerDAO implements BaseDAO<Customer> {
 
     public void save(Customer customer) {
 
-        try (Connection connection = DBUtil.getConnection()) {
+        try (Connection connection = DBUtil.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(SqlScriptConstants.CUSTOMER_INSERT);
+        ) {
 
-            PreparedStatement preparedStatement = connection.prepareStatement(SqlScriptConstants.CUSTOMER_INSERT);
 
             preparedStatement.setString(1, customer.getName());
             preparedStatement.setString(2, customer.getEmail());
@@ -32,9 +33,9 @@ public class CustomerDAO implements BaseDAO<Customer> {
 
         Customer customer = null;
 
-        try (Connection connection = DBUtil.getConnection()) {
+        try (Connection connection = DBUtil.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(SqlScriptConstants.CUSTOMER_FIND_BY_ID);) {
 
-            PreparedStatement preparedStatement = connection.prepareStatement(SqlScriptConstants.CUSTOMER_FIND_BY_ID);
 
             preparedStatement.setLong(1, id);
 
@@ -60,11 +61,11 @@ public class CustomerDAO implements BaseDAO<Customer> {
         List<Customer> customers = new ArrayList<>();
 
 
-        try (Connection connection = DBUtil.getConnection()) {
+        try (Connection connection = DBUtil.getConnection();
+             Statement statement = connection.createStatement();
 
-            Statement statement = connection.createStatement();
+             ResultSet resultSet = statement.executeQuery(SqlScriptConstants.CUSTOMER_FIND_ALL);) {
 
-            ResultSet resultSet = statement.executeQuery(SqlScriptConstants.CUSTOMER_FIND_ALL);
 
             while (resultSet.next()) {
                 Customer customer = new Customer();
@@ -94,9 +95,9 @@ public class CustomerDAO implements BaseDAO<Customer> {
 
     public boolean existByEmail(String email) {
 
-        try (Connection connection = DBUtil.getConnection()) {
-
-            PreparedStatement preparedStatement = connection.prepareStatement(SqlScriptConstants.CUSTOMER_EXISTS_BY_EMAIL);
+        try (Connection connection = DBUtil.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(SqlScriptConstants.CUSTOMER_EXISTS_BY_EMAIL);
+        ) {
 
             preparedStatement.setString(1, email);
 
@@ -113,9 +114,9 @@ public class CustomerDAO implements BaseDAO<Customer> {
 
         Customer customer = null;
 
-        try (Connection connection = DBUtil.getConnection()) {
+        try (Connection connection = DBUtil.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(SqlScriptConstants.CUSTOMER_EXISTS_BY_EMAIL);) {
 
-            PreparedStatement preparedStatement = connection.prepareStatement(SqlScriptConstants.CUSTOMER_EXISTS_BY_EMAIL);
 
             preparedStatement.setString(1, email);
 

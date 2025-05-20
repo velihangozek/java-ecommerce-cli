@@ -28,7 +28,7 @@ public class UserService {
 
     }
 
-    public void login(String userName, String password) throws VeloStoreException {
+    public User login(String userName, String password) throws VeloStoreException {
         User foundUser = userDAO.findByUserName(userName);
 
         if (foundUser != null) {
@@ -43,5 +43,7 @@ public class UserService {
 
         System.out.println("Login successful!");
         System.out.println("Welcome, " + foundUser.getUserName() + "!");
+
+        return foundUser;
     }
 }

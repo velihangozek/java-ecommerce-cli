@@ -31,6 +31,14 @@ public class SqlScriptConstants {
     public static final String USER_FIND_BY_USERNAME = """
             SELECT * FROM users WHERE username = ?
             """;
+    public static final String PRODUCT_INSERT = """
+            INSERT INTO product (name, price, stock, category_id, created_by_user, updated_by_user)
+            VALUES (?,?,?,?,?,?)
+            """;
+    public static final String CATEGORY_INSERT = """
+            INSERT INTO category (name, created_by_user, updated_by_user)
+            VALUES (?,?,?)
+            """;
 
     private SqlScriptConstants() {
     }

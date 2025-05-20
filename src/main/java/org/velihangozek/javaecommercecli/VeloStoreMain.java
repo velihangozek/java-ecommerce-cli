@@ -1,6 +1,8 @@
 package org.velihangozek.javaecommercecli;
 
+import org.velihangozek.javaecommercecli.exception.ExceptionMessagesConstants;
 import org.velihangozek.javaecommercecli.exception.VeloStoreException;
+import org.velihangozek.javaecommercecli.model.User;
 import org.velihangozek.javaecommercecli.model.enums.Role;
 import org.velihangozek.javaecommercecli.service.CustomerService;
 import org.velihangozek.javaecommercecli.service.UserService;
@@ -99,7 +101,88 @@ public class VeloStoreMain {
         System.out.print("Please enter your password: ");
         String password = scanner.nextLine();
 
-        userService.login(userName, password);
+        User loggedInUser = userService.login(userName, password);
+
+        if (loggedInUser != null && loggedInUser.getActive()) {
+
+            getLoggedInUserMenu();
+
+        } else {
+            throw new VeloStoreException(ExceptionMessagesConstants.USER_IS_NOT_ACTIVE);
+        }
+    }
+
+    private static void getLoggedInUserMenu() {
+
+        while (true) {
+
+            System.out.println("\n=========  LOGGED IN USER MENU =========\n");
+
+            System.out.println("1 - Create a new category");
+            System.out.println("2 - List all categories");
+            System.out.println("3 - Delete a category by name");
+            System.out.println("4 - Create a new product");
+            System.out.println("5 - List all products");
+            System.out.println("6 - Delete a product by name");
+            System.out.println("7 - List all orders");
+
+            System.out.println("0 - Go back");
+
+            System.out.println("Please select an option: ");
+            String choice = scanner.nextLine();
+
+            switch (choice) {
+                case "1":
+                    createCategory();
+                    break;
+                case "2":
+                    listCategories();
+                    break;
+                case "3":
+                    deleteCategory();
+                    break;
+                case "4":
+                    createProduct();
+                    break;
+                case "5":
+                    listProducts();
+                    break;
+                case "6":
+                    deleteProduct();
+                    break;
+                case "7":
+                    listOrders();
+                    break;
+                case "0":
+                    return;
+                default:
+                    System.out.println("Invalid option!");
+                    break;
+
+            }
+
+        }
+    }
+
+    private static void listOrders() {
+    }
+
+    private static void deleteProduct() {
+    }
+
+    private static void listProducts() {
+    }
+
+    private static void createProduct() {
+    }
+
+    private static void deleteCategory() {
+    }
+
+    private static void listCategories() {
+    }
+
+    private static void createCategory() {
     }
 
     private static void registerUser() throws VeloStoreException {

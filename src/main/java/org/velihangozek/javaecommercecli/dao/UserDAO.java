@@ -16,9 +16,9 @@ public class UserDAO implements BaseDAO<User> {
 
     @Override
     public void save(User user) {
-        try (Connection connection = DBUtil.getConnection()) {
+        try (Connection connection = DBUtil.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(SqlScriptConstants.USER_INSERT);) {
 
-            PreparedStatement preparedStatement = connection.prepareStatement(SqlScriptConstants.USER_INSERT);
             preparedStatement.setString(1, user.getUserName());
             preparedStatement.setString(2, user.getPassword());
             preparedStatement.setString(3, user.getRole().name());
@@ -54,9 +54,10 @@ public class UserDAO implements BaseDAO<User> {
     public User findByUserName(String userName) {
         User user = null;
 
-        try (Connection connection = DBUtil.getConnection()) {
+        try (Connection connection = DBUtil.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(SqlScriptConstants.USER_FIND_BY_USERNAME);) {
 
-            PreparedStatement preparedStatement = connection.prepareStatement(SqlScriptConstants.USER_FIND_BY_USERNAME);
+
             preparedStatement.setString(1, userName);
             ResultSet resultSet = preparedStatement.executeQuery();
 

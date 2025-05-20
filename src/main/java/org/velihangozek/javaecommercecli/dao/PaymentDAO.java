@@ -12,13 +12,14 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.List;
 
-public class PaymentDAO implements BaseDAO<Payment>{
+public class PaymentDAO implements BaseDAO<Payment> {
 
     public void save(Payment payment) {
 
-        try (Connection connection = DBUtil.getConnection()) {
+        try (Connection connection = DBUtil.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(SqlScriptConstants.PAYMENT_INSERT);) {
 
-            PreparedStatement preparedStatement = connection.prepareStatement(SqlScriptConstants.PAYMENT_INSERT);
+
             preparedStatement.setLong(1, payment.getOrder().getId());
             preparedStatement.setString(2, payment.getPaymentMethod().name());
             preparedStatement.setBigDecimal(3, payment.getAmount());

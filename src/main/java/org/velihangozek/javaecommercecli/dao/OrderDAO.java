@@ -7,14 +7,15 @@ import org.velihangozek.javaecommercecli.util.DBUtil;
 import java.sql.*;
 import java.util.List;
 
-public class OrderDAO implements BaseDAO<Order>{
+public class OrderDAO implements BaseDAO<Order> {
 
 
     public void save(Order order) {
 
-        try (Connection connection = DBUtil.getConnection()) {
+        try (Connection connection = DBUtil.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(SqlScriptConstants.ORDER_INSERT);) {
 
-            PreparedStatement preparedStatement = connection.prepareStatement(SqlScriptConstants.ORDER_INSERT);
+
             preparedStatement.setLong(1, order.getCustomer().getId());
             preparedStatement.setTimestamp(2, Timestamp.valueOf(order.getOrderDate()));
             preparedStatement.setBigDecimal(3, order.getTotalAmount());

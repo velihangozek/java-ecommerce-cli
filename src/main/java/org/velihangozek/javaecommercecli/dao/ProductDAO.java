@@ -10,13 +10,14 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ProductDAO implements BaseDAO<Product>{
+public class ProductDAO implements BaseDAO<Product> {
 
     public List<Product> searchByName(String name) {
         List<Product> productList = new ArrayList<>();
 
-        try (Connection connection = DBUtil.getConnection()) {
-            PreparedStatement preparedStatement = connection.prepareStatement(SqlScriptConstants.PRODUCT_SEARCH_BY_NAME);
+        try (Connection connection = DBUtil.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(SqlScriptConstants.PRODUCT_SEARCH_BY_NAME);) {
+
             preparedStatement.setString(1, "%" + name + "%");
             ResultSet resultSet = preparedStatement.executeQuery();
 
@@ -40,6 +41,22 @@ public class ProductDAO implements BaseDAO<Product>{
 
     @Override
     public void save(Product product) {
+
+        try (Connection connection = DBUtil.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(SqlScriptConstants.PRODUCT_INSERT);) {
+
+            preparedStatement.setString(1, product.getName());
+            preparedStatement.setBigDecimal(2, product.getPrice());
+            preparedStatement.setInt(3, product.getStock());
+            preparedStatement.setLong(4, product.getCategory().getId());
+            preparedStatement.setLong(5, product.getCreatedByUser().getId());
+            preparedStatement.setLong(6, product.getUpdatedByUser().getId());
+
+            preparedStatement.executeUpdate();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
 
     }
 
