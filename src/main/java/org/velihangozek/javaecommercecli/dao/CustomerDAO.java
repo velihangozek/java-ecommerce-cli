@@ -67,8 +67,8 @@ public class CustomerDAO {
                 customer.setId(resultSet.getLong("id"));
                 customer.setName(resultSet.getString("name"));
                 customer.setEmail(resultSet.getString("email"));
-                customer.setCreatedDate(new Timestamp(resultSet.getDate("createdDate").getTime()).toLocalDateTime());
-                customer.setUpdatedDate(new Timestamp(resultSet.getDate("updatedDate").getTime()).toLocalDateTime());
+                customer.setCreatedDate(new Timestamp(resultSet.getDate("createddate").getTime()).toLocalDateTime());
+                customer.setUpdatedDate(new Timestamp(resultSet.getDate("updateddate").getTime()).toLocalDateTime());
             }
 
         } catch (SQLException e) {

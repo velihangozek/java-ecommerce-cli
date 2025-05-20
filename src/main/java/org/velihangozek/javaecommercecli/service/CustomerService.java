@@ -7,10 +7,10 @@ import org.velihangozek.javaecommercecli.model.Customer;
 import org.velihangozek.javaecommercecli.util.PasswordUtil;
 
 public class CustomerService {
-    private CustomerDAO customerDAO;
+    private final CustomerDAO customerDAO;
 
     public CustomerService() {
-        customerDAO = new CustomerDAO();
+        this.customerDAO = new CustomerDAO();
     }
 
     public void save(String name, String email, String password) throws VeloStoreException {
