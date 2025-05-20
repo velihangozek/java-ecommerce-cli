@@ -46,3 +46,6 @@ CREATE TABLE payment
     createdDate    DATE DEFAULT current_date,
     updatedDate    DATE DEFAULT current_date
 );
+
+-- ALTER Command - Just in case
+-- ALTER TABLE product RENAME COLUMN private TO price;

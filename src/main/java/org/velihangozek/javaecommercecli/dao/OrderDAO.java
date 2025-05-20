@@ -2,16 +2,13 @@ package org.velihangozek.javaecommercecli.dao;
 
 import org.velihangozek.javaecommercecli.model.Order;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import java.sql.*;
 
 public class OrderDAO {
 
     private static final String INSERT_ORDER_SCRIPT = """
-            INSERT INTO "/order/" (customer_id, order_date, total_amount, createddate, updateddate) 
-                VALUES (?,?,?,?,?)
+            INSERT INTO \"order\" (customer_id, order_date, total_amount) 
+                VALUES (?,?,?)
             """;
 
     public void save(Order order) {
@@ -24,10 +21,10 @@ public class OrderDAO {
 
             PreparedStatement preparedStatement = connection.prepareStatement(INSERT_ORDER_SCRIPT);
             preparedStatement.setLong(1, order.getCustomer().getId());
-            preparedStatement.setTimestamp(2, java.sql.Timestamp.valueOf(order.getOrderDate()));
+            preparedStatement.setTimestamp(2, Timestamp.valueOf(order.getOrderDate()));
             preparedStatement.setBigDecimal(3, order.getTotalAmount());
-            preparedStatement.setTimestamp(4, java.sql.Timestamp.valueOf(order.getCreatedDate()));
-            preparedStatement.setTimestamp(5, java.sql.Timestamp.valueOf(order.getUpdatedDate()));
+            preparedStatement.setTimestamp(4, Timestamp.valueOf(order.getCreatedDate()));
+            preparedStatement.setTimestamp(5, Timestamp.valueOf(order.getUpdatedDate()));
 
             preparedStatement.executeUpdate();
 

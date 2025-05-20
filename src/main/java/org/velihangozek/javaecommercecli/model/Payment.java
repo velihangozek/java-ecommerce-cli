@@ -9,10 +9,10 @@ public class Payment extends BaseModel{
     private PaymentMethod paymentMethod;
     private BigDecimal amount;
 
-    public Payment(Order order, PaymentMethod paymentMethod, BigDecimal amount) {
+    public Payment(Order order, PaymentMethod paymentMethod) {
         this.order = order;
         this.paymentMethod = paymentMethod;
-        this.amount = amount;
+        this.amount = order.getTotalAmount();
     }
 
     public Order getOrder() {
