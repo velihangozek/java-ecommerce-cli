@@ -58,3 +58,13 @@ CREATE TABLE users
 
 -- ALTER Command - Just in case
 -- ALTER TABLE product RENAME COLUMN private TO price;
+
+ALTER TABLE product
+    ADD COLUMN created_by_user INT REFERENCES users (id);
+ALTER TABLE product
+    ADD COLUMN updated_by_user INT REFERENCES users (id);
+
+ALTER TABLE category
+    ADD COLUMN created_by_user INT REFERENCES users (id);
+ALTER TABLE category
+    ADD COLUMN updated_by_user INT REFERENCES users (id);
