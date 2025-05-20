@@ -1,11 +1,13 @@
 package org.velihangozek.javaecommercecli.model;
 
-import java.time.LocalDateTime;
-
 public class Customer extends BaseModel{
     private String name;
     private String email;
     private String password; // TODO Must be hashed.
+
+    public Customer() {
+
+    }
 
     public Customer(String name, String email, String password) {
         this.name = name;
