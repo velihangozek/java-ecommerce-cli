@@ -42,7 +42,7 @@ public class CustomerService {
         if (foundCustomer != null) {
             boolean passwordsEqual = foundCustomer.getPassword().equals(hashedPassword);
             if (passwordsEqual) {
-                System.out.println("Login successful!");
+                System.out.println("Customer login successful!");
             } else {
                 throw new VeloStoreException(ExceptionMessagesConstants.CUSTOMER_PASSWORD_DOES_NOT_MATCH);
             }
