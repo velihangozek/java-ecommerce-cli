@@ -1,28 +1,22 @@
 package org.velihangozek.javaecommercecli.dao;
 
+import org.velihangozek.javaecommercecli.dao.constants.SqlScriptConstants;
 import org.velihangozek.javaecommercecli.model.Customer;
 import org.velihangozek.javaecommercecli.model.Product;
+import org.velihangozek.javaecommercecli.util.DBUtil;
 
 import java.sql.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ProductDAO {
-
-    private static final String SEARCH_PRODUCT_BY_NAME_SCRIPT = """
-            SELECT * FROM product WHERE name LIKE ?
-            """;
+public class ProductDAO implements BaseDAO<Product>{
 
     public List<Product> searchByName(String name) {
         List<Product> productList = new ArrayList<>();
 
-        String url = "jdbc:postgresql://localhost:5432/velihan_store";
-        String user = "postgres";
-        String password = "postgres";
-
-        try (Connection connection = DriverManager.getConnection(url, user, password)) {
-            PreparedStatement preparedStatement = connection.prepareStatement(SEARCH_PRODUCT_BY_NAME_SCRIPT);
+        try (Connection connection = DBUtil.getConnection()) {
+            PreparedStatement preparedStatement = connection.prepareStatement(SqlScriptConstants.PRODUCT_SEARCH_BY_NAME);
             preparedStatement.setString(1, "%" + name + "%");
             ResultSet resultSet = preparedStatement.executeQuery();
 
@@ -42,5 +36,30 @@ public class ProductDAO {
         }
 
         return productList;
+    }
+
+    @Override
+    public void save(Product product) {
+
+    }
+
+    @Override
+    public Product findById(Long id) {
+        return null;
+    }
+
+    @Override
+    public List<Product> findAll() {
+        return List.of();
+    }
+
+    @Override
+    public void update(Product product) {
+
+    }
+
+    @Override
+    public void delete(long id) {
+
     }
 }

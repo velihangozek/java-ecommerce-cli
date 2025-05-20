@@ -1,38 +1,20 @@
 package org.velihangozek.javaecommercecli.dao;
 
+import org.velihangozek.javaecommercecli.dao.constants.SqlScriptConstants;
 import org.velihangozek.javaecommercecli.model.Customer;
+import org.velihangozek.javaecommercecli.util.DBUtil;
 
-import javax.swing.plaf.nimbus.State;
 import java.sql.*;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CustomerDAO {
-
-    private final String INSERT_CUSTOMER_SCRIPT = """
-                INSERT INTO customer (name, email, password) VALUES (?, ?, ?)
-            """;
-    private final String FIND_CUSTOMER_BY_ID_SCRIPT = """
-                SELECT * FROM customer WHERE id = ?
-            """;
-    private final String FIND_ALL_CUSTOMERS_SCRIPT = """
-                SELECT * FROM customer
-            """;
-    private final String CUSTOMER_EXISTS_BY_EMAIL_SCRIPT = """
-                SELECT * FROM customer WHERE email = ? LIMIT 1
-            """;
+public class CustomerDAO implements BaseDAO<Customer> {
 
     public void save(Customer customer) {
 
-        String url = "jdbc:postgresql://localhost:5432/velihan_store";
-        String user = "postgres";
-        String password = "postgres";
+        try (Connection connection = DBUtil.getConnection()) {
 
-        try {
-            Connection connection = DriverManager.getConnection(url, user, password);
-
-            PreparedStatement preparedStatement = connection.prepareStatement(INSERT_CUSTOMER_SCRIPT);
+            PreparedStatement preparedStatement = connection.prepareStatement(SqlScriptConstants.CUSTOMER_INSERT);
 
             preparedStatement.setString(1, customer.getName());
             preparedStatement.setString(2, customer.getEmail());
@@ -41,22 +23,18 @@ public class CustomerDAO {
             preparedStatement.executeUpdate();
 
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
         }
 
     }
 
     public Customer findById(Long id) {
-        String url = "jdbc:postgresql://localhost:5432/velihan_store";
-        String user = "postgres";
-        String password = "postgres";
 
         Customer customer = null;
 
-        try {
-            Connection connection = DriverManager.getConnection(url, user, password);
+        try (Connection connection = DBUtil.getConnection()) {
 
-            PreparedStatement preparedStatement = connection.prepareStatement(FIND_CUSTOMER_BY_ID_SCRIPT);
+            PreparedStatement preparedStatement = connection.prepareStatement(SqlScriptConstants.CUSTOMER_FIND_BY_ID);
 
             preparedStatement.setLong(1, id);
 
@@ -72,25 +50,21 @@ public class CustomerDAO {
             }
 
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
         }
         return customer;
     }
 
     public List<Customer> findAll() {
-        String url = "jdbc:postgresql://localhost:5432/velihan_store";
-        String user = "postgres";
-        String password = "postgres";
 
         List<Customer> customers = new ArrayList<>();
 
 
-        try {
-            Connection connection = DriverManager.getConnection(url, user, password);
+        try (Connection connection = DBUtil.getConnection()) {
 
             Statement statement = connection.createStatement();
 
-            ResultSet resultSet = statement.executeQuery(FIND_ALL_CUSTOMERS_SCRIPT);
+            ResultSet resultSet = statement.executeQuery(SqlScriptConstants.CUSTOMER_FIND_ALL);
 
             while (resultSet.next()) {
                 Customer customer = new Customer();
@@ -103,20 +77,26 @@ public class CustomerDAO {
             }
 
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
         }
         return customers;
     }
 
+    @Override
+    public void update(Customer customer) {
+
+    }
+
+    @Override
+    public void delete(long id) {
+
+    }
+
     public boolean existByEmail(String email) {
-        String url = "jdbc:postgresql://localhost:5432/velihan_store";
-        String user = "postgres";
-        String password = "postgres";
 
-        try {
-            Connection connection = DriverManager.getConnection(url, user, password);
+        try (Connection connection = DBUtil.getConnection()) {
 
-            PreparedStatement preparedStatement = connection.prepareStatement(CUSTOMER_EXISTS_BY_EMAIL_SCRIPT);
+            PreparedStatement preparedStatement = connection.prepareStatement(SqlScriptConstants.CUSTOMER_EXISTS_BY_EMAIL);
 
             preparedStatement.setString(1, email);
 
@@ -130,15 +110,12 @@ public class CustomerDAO {
     }
 
     public Customer findByEmail(String email) {
-        String url = "jdbc:postgresql://localhost:5432/velihan_store";
-        String user = "postgres";
-        String password = "postgres";
+
         Customer customer = null;
 
-        try {
-            Connection connection = DriverManager.getConnection(url, user, password);
+        try (Connection connection = DBUtil.getConnection()) {
 
-            PreparedStatement preparedStatement = connection.prepareStatement(CUSTOMER_EXISTS_BY_EMAIL_SCRIPT);
+            PreparedStatement preparedStatement = connection.prepareStatement(SqlScriptConstants.CUSTOMER_EXISTS_BY_EMAIL);
 
             preparedStatement.setString(1, email);
 

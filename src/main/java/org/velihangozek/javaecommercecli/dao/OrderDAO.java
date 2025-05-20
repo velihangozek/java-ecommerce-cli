@@ -1,25 +1,20 @@
 package org.velihangozek.javaecommercecli.dao;
 
+import org.velihangozek.javaecommercecli.dao.constants.SqlScriptConstants;
 import org.velihangozek.javaecommercecli.model.Order;
+import org.velihangozek.javaecommercecli.util.DBUtil;
 
 import java.sql.*;
+import java.util.List;
 
-public class OrderDAO {
+public class OrderDAO implements BaseDAO<Order>{
 
-    private static final String INSERT_ORDER_SCRIPT = """
-            INSERT INTO \"order\" (customer_id, order_date, total_amount) 
-                VALUES (?,?,?)
-            """;
 
     public void save(Order order) {
 
-        String url = "jdbc:postgresql://localhost:5432/velihan_store";
-        String user = "postgres";
-        String password = "postgres";
+        try (Connection connection = DBUtil.getConnection()) {
 
-        try (Connection connection = DriverManager.getConnection(url, user, password)) {
-
-            PreparedStatement preparedStatement = connection.prepareStatement(INSERT_ORDER_SCRIPT);
+            PreparedStatement preparedStatement = connection.prepareStatement(SqlScriptConstants.ORDER_INSERT);
             preparedStatement.setLong(1, order.getCustomer().getId());
             preparedStatement.setTimestamp(2, Timestamp.valueOf(order.getOrderDate()));
             preparedStatement.setBigDecimal(3, order.getTotalAmount());
@@ -31,5 +26,25 @@ public class OrderDAO {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public Order findById(Long id) {
+        return null;
+    }
+
+    @Override
+    public List<Order> findAll() {
+        return List.of();
+    }
+
+    @Override
+    public void update(Order order) {
+
+    }
+
+    @Override
+    public void delete(long id) {
+
     }
 }
