@@ -19,6 +19,9 @@ public class CustomerDAO {
     private final String FIND_ALL_CUSTOMERS_SCRIPT = """
                 SELECT * FROM customer
             """;
+    private final String CUSTOMER_EXISTS_BY_EMAIL_SCRIPT = """
+                SELECT * FROM customer WHERE email = ? LIMIT 1
+            """;
 
     public void save(Customer customer) {
 
@@ -64,8 +67,8 @@ public class CustomerDAO {
                 customer.setId(resultSet.getLong("id"));
                 customer.setName(resultSet.getString("name"));
                 customer.setEmail(resultSet.getString("email"));
-                // customer.setCreatedDate(LocalDateTime.resultSet.getDate("createdDate")); TODO Parse
-
+                customer.setCreatedDate(new Timestamp(resultSet.getDate("createdDate").getTime()).toLocalDateTime());
+                customer.setUpdatedDate(new Timestamp(resultSet.getDate("updatedDate").getTime()).toLocalDateTime());
             }
 
         } catch (SQLException e) {
@@ -94,8 +97,8 @@ public class CustomerDAO {
                 customer.setId(resultSet.getLong("id"));
                 customer.setName(resultSet.getString("name"));
                 customer.setEmail(resultSet.getString("email"));
-                // customer.setCreatedDate(LocalDateTime.resultSet.getDate("createdDate")); TODO Parse
-
+                customer.setCreatedDate(new Timestamp(resultSet.getDate("createdDate").getTime()).toLocalDateTime());
+                customer.setUpdatedDate(new Timestamp(resultSet.getDate("updatedDate").getTime()).toLocalDateTime());
                 customers.add(customer);
             }
 
@@ -105,4 +108,51 @@ public class CustomerDAO {
         return customers;
     }
 
+    public boolean existByEmail(String email) {
+        String url = "jdbc:postgresql://localhost:5432/velihan_store";
+        String user = "postgres";
+        String password = "postgres";
+
+        try {
+            Connection connection = DriverManager.getConnection(url, user, password);
+
+            PreparedStatement preparedStatement = connection.prepareStatement(CUSTOMER_EXISTS_BY_EMAIL_SCRIPT);
+
+            preparedStatement.setString(1, email);
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            return resultSet.next();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public Customer findByEmail(String email) {
+        String url = "jdbc:postgresql://localhost:5432/velihan_store";
+        String user = "postgres";
+        String password = "postgres";
+        Customer customer = null;
+
+        try {
+            Connection connection = DriverManager.getConnection(url, user, password);
+
+            PreparedStatement preparedStatement = connection.prepareStatement(CUSTOMER_EXISTS_BY_EMAIL_SCRIPT);
+
+            preparedStatement.setString(1, email);
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+            customer = new Customer();
+            customer.setId(resultSet.getLong("id"));
+            customer.setName(resultSet.getString("name"));
+            customer.setEmail(resultSet.getString("email"));
+            customer.setPassword(resultSet.getString("password"));
+            customer.setCreatedDate(new Timestamp(resultSet.getDate("createdDate").getTime()).toLocalDateTime());
+            customer.setUpdatedDate(new Timestamp(resultSet.getDate("updatedDate").getTime()).toLocalDateTime());
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return customer;
+    }
 }

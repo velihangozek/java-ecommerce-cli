@@ -41,7 +41,13 @@ public class VeloStoreMain {
     }
 
     private static void loginCustomer(Scanner scanner) {
-        // TODO
+        System.out.print("Please enter your email: ");
+        String email = scanner.nextLine();
+        System.out.print("Please enter your password: ");
+        String password = scanner.nextLine();
+
+        CustomerService customerService = new CustomerService();
+        customerService.login(email, password);
     }
 
     private static void saveCustomer(Scanner scanner) {
