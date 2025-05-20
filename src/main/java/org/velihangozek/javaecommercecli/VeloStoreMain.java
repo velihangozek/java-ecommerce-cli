@@ -1,5 +1,6 @@
 package org.velihangozek.javaecommercecli;
 
+import org.velihangozek.javaecommercecli.exception.VeloStoreException;
 import org.velihangozek.javaecommercecli.model.Customer;
 import org.velihangozek.javaecommercecli.service.CustomerService;
 
@@ -22,25 +23,29 @@ public class VeloStoreMain {
             System.out.println("Please select an option: ");
             String choice = scanner.nextLine();
 
-            switch (choice) {
-                case "1":
-                    saveCustomer(scanner);
-                    break;
-                case "2":
-                    loginCustomer(scanner);
-                    break;
-                case "0":
-                    System.out.println("Exiting...");
-                    return;
-                default:
-                    System.out.println("Invalid option!");
-                    break;
+            try {
+                switch (choice) {
+                    case "1":
+                        saveCustomer(scanner);
+                        break;
+                    case "2":
+                        loginCustomer(scanner);
+                        break;
+                    case "0":
+                        System.out.println("Exiting...");
+                        return;
+                    default:
+                        System.out.println("Invalid option!");
+                        break;
+                }
+            } catch (VeloStoreException e) {
+                System.out.println(e.getMessage());
             }
         }
 
     }
 
-    private static void loginCustomer(Scanner scanner) {
+    private static void loginCustomer(Scanner scanner) throws VeloStoreException {
         System.out.print("Please enter your email: ");
         String email = scanner.nextLine();
         System.out.print("Please enter your password: ");
@@ -50,7 +55,7 @@ public class VeloStoreMain {
         customerService.login(email, password);
     }
 
-    private static void saveCustomer(Scanner scanner) {
+    private static void saveCustomer(Scanner scanner) throws VeloStoreException {
         System.out.print("Please enter your name: ");
         String name = scanner.nextLine();
         System.out.print("Please enter your email: ");

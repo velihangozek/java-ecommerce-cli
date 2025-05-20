@@ -13,7 +13,7 @@ public class CustomerService {
         customerDAO = new CustomerDAO();
     }
 
-    public void save(String name, String email, String password) {
+    public void save(String name, String email, String password) throws VeloStoreException {
 
         boolean customerExists = customerDAO.existByEmail(email);
 
@@ -28,7 +28,7 @@ public class CustomerService {
         System.out.println("Customer saved successfully!");
     }
 
-    public void login(String email, String password) {
+    public void login(String email, String password) throws VeloStoreException {
         boolean customerExists = customerDAO.existByEmail(email);
 
         if (!customerExists) {
