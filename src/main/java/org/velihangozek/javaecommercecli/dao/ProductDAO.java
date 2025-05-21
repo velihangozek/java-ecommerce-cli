@@ -174,7 +174,7 @@ public class ProductDAO implements BaseDAO<Product> {
         try (Connection connection = DBUtil.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(SqlScriptConstants.PRODUCT_FIND_BY_NAME)) {
 
-            preparedStatement.setString(1, "%" + productName + "%");
+            preparedStatement.setString(1, productName);
 
             ResultSet resultSet = preparedStatement.executeQuery();
 

@@ -69,7 +69,7 @@ public class SqlScriptConstants {
             WHERE c.name ILIKE ?
             """;
     public static final String PRODUCT_FIND_BY_NAME = """
-            SELECT * FROM product WHERE name ILIKE ?
+            SELECT * FROM product WHERE name = ?
             """;
     public static final String USER_INSERT = """
             INSERT INTO users (username, password, role, isactive) 
@@ -94,6 +94,10 @@ public class SqlScriptConstants {
             """;
     public static final String CART_FIND_BY_CUSTOMER_ID = """
             SELECT * FROM cart WHERE customer_id = ?
+            """;
+    public static final String CART_INSERT = """
+            INSERT INTO cart (customer_id, product_id, quantity)
+            VALUES (?,?,?)
             """;
 
     private SqlScriptConstants() {

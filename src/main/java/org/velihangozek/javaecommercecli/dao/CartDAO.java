@@ -47,4 +47,19 @@ public class CartDAO {
         return cart;
     }
 
+    public void save(Cart cart) {
+
+        try (Connection connection = DBUtil.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(SqlScriptConstants.CART_INSERT)) {
+
+            preparedStatement.setLong(1, cart.getCustomer().getId());
+            preparedStatement.setLong(2, cart.getItems().getFirst().getProduct().getId());
+            preparedStatement.setInt(3, cart.getQuantity());
+
+            preparedStatement.executeUpdate();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 }

@@ -376,24 +376,17 @@ public class VeloStoreMain {
                 System.out.println("Product could not be found!");
             } else {
                 System.out.println("Amount of product to be added: ");
-                int stock = scanner.nextInt();
+                int quantity = scanner.nextInt();
+                scanner.nextLine(); // Clear the buffer
 
-                if (product.getStock() < stock) {
+                if (product.getStock() < quantity) {
                     throw new VeloStoreException(ExceptionMessagesConstants.PRODUCT_STOCK_IS_NOT_VALID);
                 }
 
-                Cart cart = cartService.getByCustomerId(LOGGED_IN_CUSTOMER.getId());
-
-                if (cart == null) {
-                    cart = new Cart();
-                }
-
-                cart.getItems().add(new CartItem(product));
-
-                System.out.println("Product added to cart successfully!");
+                cartService.addToCart(LOGGED_IN_CUSTOMER, product, quantity);
 
                 System.out.println("Would you like to add another product to cart? (Y/N) ");
-                scanner.nextLine();
+
                 String yesNo = scanner.nextLine();
 
                 if (!("Y".equalsIgnoreCase(yesNo) || "YES".equalsIgnoreCase(yesNo))) {
