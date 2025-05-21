@@ -179,9 +179,21 @@ public class VeloStoreMain {
     }
 
     private static void deleteProduct() {
+        System.out.print("Please enter the id of the product you want to delete: ");
+        String productIdToBeDeleted = scanner.nextLine();
+        productService.deleteById(Long.parseLong(productIdToBeDeleted));
     }
 
     private static void listProducts() {
+        List<Product> productList = productService.getAll();
+
+        System.out.println("\n=========  PRODUCT LIST =========\n");
+
+        productList.forEach(product ->
+                System.out.printf("%s - %s - %s\n", product.getName(), product.getPrice(), product.getCategory().getName())
+        );
+
+        System.out.println("\n=========  END OF PRODUCT LIST =========\n");
     }
 
     private static void createProduct() throws VeloStoreException {

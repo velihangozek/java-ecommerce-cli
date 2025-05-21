@@ -7,6 +7,8 @@ import org.velihangozek.javaecommercecli.model.Product;
 import org.velihangozek.javaecommercecli.model.User;
 import org.velihangozek.javaecommercecli.model.enums.Role;
 
+import java.util.List;
+
 public class ProductService {
     private final ProductDAO productDAO;
 
@@ -26,5 +28,14 @@ public class ProductService {
         productDAO.save(product);
         System.out.println("Product saved successfully!");
 
+    }
+
+    public List<Product> getAll() {
+        return productDAO.findAll();
+    }
+
+    public void deleteById(long id) {
+        productDAO.delete(id);
+        System.out.println("Product deleted successfully! => " + id);
     }
 }

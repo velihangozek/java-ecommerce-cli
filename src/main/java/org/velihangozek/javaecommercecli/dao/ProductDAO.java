@@ -1,6 +1,7 @@
 package org.velihangozek.javaecommercecli.dao;
 
 import org.velihangozek.javaecommercecli.dao.constants.SqlScriptConstants;
+import org.velihangozek.javaecommercecli.model.Category;
 import org.velihangozek.javaecommercecli.model.Customer;
 import org.velihangozek.javaecommercecli.model.Product;
 import org.velihangozek.javaecommercecli.util.DBUtil;
@@ -67,7 +68,33 @@ public class ProductDAO implements BaseDAO<Product> {
 
     @Override
     public List<Product> findAll() {
-        return List.of();
+
+        List<Product> productList = new ArrayList<>();
+
+        try (Connection connection = DBUtil.getConnection();
+             Statement statement = connection.createStatement()) {
+
+            ResultSet resultSet = statement.executeQuery(SqlScriptConstants.PRODUCT_FIND_ALL);
+
+            while (resultSet.next()) {
+                productList.add(
+                        new Product(
+                                resultSet.getLong("id"),
+                                resultSet.getString("name"),
+                                resultSet.getBigDecimal("price"),
+                                resultSet.getInt("stock"),
+                                new Category(
+                                        resultSet.getLong("category_id"),
+                                        resultSet.getString("category_name"))
+                        ));
+            }
+
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return productList;
     }
 
     @Override
@@ -77,6 +104,17 @@ public class ProductDAO implements BaseDAO<Product> {
 
     @Override
     public void delete(long id) {
+
+        try (Connection connection = DBUtil.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(SqlScriptConstants.PRODUCT_DELETE)) {
+
+            preparedStatement.setLong(1, id);
+            preparedStatement.executeUpdate();
+
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
 
     }
 }
