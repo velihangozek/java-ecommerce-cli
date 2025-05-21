@@ -56,8 +56,20 @@ CREATE TABLE users
     isActive boolean default true
 );
 
+CREATE TABLE cart
+(
+    id          SERIAL PRIMARY KEY,
+    customer_id INT NOT NULL REFERENCES customer (id),
+    product_id  INT NOT NULL REFERENCES product (id),
+    quantity    INT NOT NULL,
+    createdDate DATE DEFAULT current_date,
+    updatedDate DATE DEFAULT current_date
+
+);
+
 -- ALTER Command - Just in case
--- ALTER TABLE product RENAME COLUMN private TO price;
+ALTER TABLE product
+    RENAME COLUMN private TO price;
 
 ALTER TABLE product
     ADD COLUMN created_by_user INT REFERENCES users (id);
