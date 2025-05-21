@@ -28,7 +28,7 @@ public class CategoryService {
     }
 
     public List<Category> getAll() {
-        return categoryDAO.findAll();
+        return categoryDAO.findAll(5);
     }
 
     public void deleteById(long id) {

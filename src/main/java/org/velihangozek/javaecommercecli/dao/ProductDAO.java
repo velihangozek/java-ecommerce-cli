@@ -1,5 +1,6 @@
 package org.velihangozek.javaecommercecli.dao;
 
+import org.velihangozek.javaecommercecli.constants.VeloStoreConstants;
 import org.velihangozek.javaecommercecli.dao.constants.SqlScriptConstants;
 import org.velihangozek.javaecommercecli.model.Category;
 import org.velihangozek.javaecommercecli.model.Customer;
@@ -67,14 +68,18 @@ public class ProductDAO implements BaseDAO<Product> {
     }
 
     @Override
-    public List<Product> findAll() {
+    public List<Product> findAll(int page) {
 
         List<Product> productList = new ArrayList<>();
 
         try (Connection connection = DBUtil.getConnection();
-             Statement statement = connection.createStatement()) {
+             PreparedStatement preparedStatement = connection.prepareStatement(SqlScriptConstants.PRODUCT_FIND_ALL)) {
+            int size = VeloStoreConstants.PAGE_SIZE;
+            int offset = (page - 1) * size;
+            preparedStatement.setInt(1, size);
+            preparedStatement.setInt(2, offset);
 
-            ResultSet resultSet = statement.executeQuery(SqlScriptConstants.PRODUCT_FIND_ALL);
+            ResultSet resultSet = preparedStatement.executeQuery();
 
             while (resultSet.next()) {
                 productList.add(
@@ -116,5 +121,23 @@ public class ProductDAO implements BaseDAO<Product> {
             e.printStackTrace();
         }
 
+    }
+
+    public int findTotalPage() {
+
+        try (Connection connection = DBUtil.getConnection();
+             Statement statement = connection.createStatement()) {
+
+            ResultSet resultSet = statement.executeQuery(SqlScriptConstants.PRODUCT_TOTAL_PAGE_COUNT);
+
+            if (resultSet.next()) {
+                int totalRows = resultSet.getInt(1); // 17
+                return (int) Math.ceil((double) totalRows / VeloStoreConstants.PAGE_SIZE);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 0;
     }
 }

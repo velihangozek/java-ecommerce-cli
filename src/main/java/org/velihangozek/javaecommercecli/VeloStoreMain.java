@@ -185,13 +185,28 @@ public class VeloStoreMain {
     }
 
     private static void listProducts() {
-        List<Product> productList = productService.getAll();
 
-        System.out.println("\n=========  PRODUCT LIST =========\n");
+        int totalPage = productService.getTotalPage();
 
-        productList.forEach(product ->
-                System.out.printf("%s - %s - %s\n", product.getName(), product.getPrice(), product.getCategory().getName())
-        );
+        int page = 1;
+
+        do {
+
+            List<Product> productList = productService.getAll(page);
+
+            System.out.println("\n=========  PRODUCT LIST (PAGE )" + page + "/" + totalPage + "=========\n");
+
+            productList.forEach(product ->
+                    System.out.printf("%s - %s - %s\n", product.getName(), product.getPrice(), product.getCategory().getName())
+            );
+            System.out.println("\n=========  END OF THE PAGE =========\n");
+
+            System.out.println("Go to page: ");
+
+            String pageString = scanner.nextLine();
+            page = Integer.parseInt(pageString);
+
+        } while (page <= totalPage);
 
         System.out.println("\n=========  END OF PRODUCT LIST =========\n");
     }

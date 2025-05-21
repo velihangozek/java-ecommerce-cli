@@ -30,12 +30,16 @@ public class ProductService {
 
     }
 
-    public List<Product> getAll() {
-        return productDAO.findAll();
+    public List<Product> getAll(int page) {
+        return productDAO.findAll(page);
     }
 
     public void deleteById(long id) {
         productDAO.delete(id);
         System.out.println("Product deleted successfully! => " + id);
+    }
+
+    public int getTotalPage() {
+        return productDAO.findTotalPage();
     }
 }

@@ -56,7 +56,7 @@ public class CategoryDAO implements BaseDAO<Category> {
     }
 
     @Override
-    public List<Category> findAll() {
+    public List<Category> findAll(int page) {
 
         List<Category> categoryList = new ArrayList<>();
 

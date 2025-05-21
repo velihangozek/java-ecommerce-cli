@@ -36,7 +36,7 @@ public class PaymentDAO implements BaseDAO<Payment> {
     }
 
     @Override
-    public List<Payment> findAll() {
+    public List<Payment> findAll(int page) {
         return List.of();
     }
 
