@@ -1,12 +1,16 @@
 package org.velihangozek.javaecommercecli.model;
 
-public class Customer extends BaseModel{
+public class Customer extends BaseModel {
     private String name;
     private String email;
     private String password; // TODO Must be hashed.
 
     public Customer() {
 
+    }
+
+    public Customer(Long customerId) {
+        this.setId(customerId);
     }
 
     public Customer(String name, String email, String password) {

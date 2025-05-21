@@ -2,15 +2,9 @@ package org.velihangozek.javaecommercecli;
 
 import org.velihangozek.javaecommercecli.exception.ExceptionMessagesConstants;
 import org.velihangozek.javaecommercecli.exception.VeloStoreException;
-import org.velihangozek.javaecommercecli.model.Category;
-import org.velihangozek.javaecommercecli.model.Customer;
-import org.velihangozek.javaecommercecli.model.Product;
-import org.velihangozek.javaecommercecli.model.User;
+import org.velihangozek.javaecommercecli.model.*;
 import org.velihangozek.javaecommercecli.model.enums.Role;
-import org.velihangozek.javaecommercecli.service.CategoryService;
-import org.velihangozek.javaecommercecli.service.CustomerService;
-import org.velihangozek.javaecommercecli.service.ProductService;
-import org.velihangozek.javaecommercecli.service.UserService;
+import org.velihangozek.javaecommercecli.service.*;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -22,6 +16,7 @@ public class VeloStoreMain {
     private static final UserService userService = new UserService();
     private static final CategoryService categoryService = new CategoryService();
     private static final ProductService productService = new ProductService();
+    private static final CartService cartService = new CartService();
     private static User LOGGED_IN_USER;
     private static Customer LOGGED_IN_CUSTOMER;
 
@@ -318,8 +313,10 @@ public class VeloStoreMain {
             System.out.println("1 - List all products");
             System.out.println("2 - Search a product");
             System.out.println("3 - Filter products by category");
-            System.out.println("4 - Place an order");
-            System.out.println("5 - List all orders");
+            System.out.println("4 - Add a product to cart");
+            System.out.println("5 - List all cart items");
+            System.out.println("6 - Clear cart");
+            System.out.println("7 - List all orders");
 
             System.out.println("0 - Go back");
 
@@ -337,9 +334,15 @@ public class VeloStoreMain {
                     productFiltering();
                     break;
                 case "4":
-                    orderCreate();
+                    addProductToCart();
                     break;
                 case "5":
+                    listCart();
+                    break;
+                case "6":
+                    clearCart();
+                    break;
+                case "7":
                     orderList();
                     break;
                 case "0":
@@ -353,8 +356,55 @@ public class VeloStoreMain {
 
     }
 
-    private static void orderCreate() {
+    private static void clearCart() {
     }
+
+    private static void listCart() {
+    }
+
+    private static void addProductToCart() throws VeloStoreException {
+
+        boolean doesContinue = true;
+
+        while (doesContinue) {
+            System.out.print("Please enter the name of the product you want to add to cart: ");
+            String productName = scanner.nextLine();
+
+            Product product = productService.getByName(productName);
+
+            if (product == null) {
+                System.out.println("Product could not be found!");
+            } else {
+                System.out.println("Amount of product to be added: ");
+                int stock = scanner.nextInt();
+
+                if (product.getStock() < stock) {
+                    throw new VeloStoreException(ExceptionMessagesConstants.PRODUCT_STOCK_IS_NOT_VALID);
+                }
+
+                Cart cart = cartService.getByCustomerId(LOGGED_IN_CUSTOMER.getId());
+
+                if (cart == null) {
+                    cart = new Cart();
+                }
+
+                cart.getItems().add(new CartItem(product));
+
+                System.out.println("Product added to cart successfully!");
+
+                System.out.println("Would you like to add another product to cart? (Y/N) ");
+                scanner.nextLine();
+                String yesNo = scanner.nextLine();
+
+                if (!("Y".equalsIgnoreCase(yesNo) || "YES".equalsIgnoreCase(yesNo))) {
+                    doesContinue = false;
+                }
+            }
+        }
+
+
+    }
+
 
     private static void registerCustomer() throws VeloStoreException {
 

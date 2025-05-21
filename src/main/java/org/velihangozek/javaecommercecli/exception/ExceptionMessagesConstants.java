@@ -14,6 +14,7 @@ public class ExceptionMessagesConstants {
     public static final String USER_IS_NOT_AN_ADMIN = "The user does not have the ADMIN role!";
     public static final String USER_IS_NOT_ACTIVE = "The user is not active or does not exist!";
     public static final String CATEGORY_NOT_FOUND = "Could not find the category!!!";
+    public static final String PRODUCT_STOCK_IS_NOT_VALID = "The stock of the desired product is not valid!";
 
     private ExceptionMessagesConstants() {
     }

@@ -3,12 +3,10 @@ package org.velihangozek.javaecommercecli.dao;
 import org.velihangozek.javaecommercecli.constants.VeloStoreConstants;
 import org.velihangozek.javaecommercecli.dao.constants.SqlScriptConstants;
 import org.velihangozek.javaecommercecli.model.Category;
-import org.velihangozek.javaecommercecli.model.Customer;
 import org.velihangozek.javaecommercecli.model.Product;
 import org.velihangozek.javaecommercecli.util.DBUtil;
 
 import java.sql.*;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -167,5 +165,32 @@ public class ProductDAO implements BaseDAO<Product> {
 
         return productList;
 
+    }
+
+    public Product findByName(String productName) {
+
+        Product product = null;
+
+        try (Connection connection = DBUtil.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(SqlScriptConstants.PRODUCT_FIND_BY_NAME)) {
+
+            preparedStatement.setString(1, "%" + productName + "%");
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            while (resultSet.next()) {
+                product = new Product(
+                        resultSet.getLong("id"),
+                        resultSet.getString("name"),
+                        resultSet.getBigDecimal("price"),
+                        resultSet.getInt("stock")
+                );
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return product;
     }
 }

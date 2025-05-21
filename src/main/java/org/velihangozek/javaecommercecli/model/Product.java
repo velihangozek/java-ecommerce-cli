@@ -12,6 +12,17 @@ public class Product extends BaseModel {
     public Product() {
     }
 
+    public Product(Long productId) {
+        this.setId(productId);
+    }
+
+    public Product(Long id, String name, BigDecimal price, int stock) {
+        this.setId(id);
+        this.name = name;
+        this.price = price;
+        this.stock = stock;
+    }
+
     public Product(Long id, String name, BigDecimal price, int stock, Category category) {
         this.setId(id);
         this.name = name;
