@@ -39,6 +39,15 @@ public class SqlScriptConstants {
             INSERT INTO category (name, created_by_user, updated_by_user)
             VALUES (?,?,?)
             """;
+    public static final String CATEGORY_DELETE = """
+            DELETE FROM category WHERE id = ?
+            """;
+    public static final String CATEGORY_FIND_BY_ID = """
+            SELECT * FROM category WHERE id = ?
+            """;
+    public static final String CATEGORY_FIND_ALL = """
+            SELECT * FROM category
+            """;
 
     private SqlScriptConstants() {
     }
