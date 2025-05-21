@@ -24,21 +24,28 @@ public class ProductDAO implements BaseDAO<Product> {
             ResultSet resultSet = preparedStatement.executeQuery();
 
             while (resultSet.next()) {
-                Product product = new Product();
-                product.setId(resultSet.getLong("id"));
-                product.setName(resultSet.getString("name"));
-                product.setPrice(resultSet.getBigDecimal("price"));
-                product.setStock(resultSet.getInt("stock"));
-                // TODO Category id
-                product.setCreatedDate(LocalDateTime.parse(resultSet.getString("createddate")));
-                product.setUpdatedDate(LocalDateTime.parse(resultSet.getString("updateddate")));
-                productList.add(product);
+                productList.add(getProduct(resultSet));
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
 
         return productList;
+    }
+
+    private Product getProduct(ResultSet resultSet) throws SQLException {
+        Product product = new Product();
+        product.setId(resultSet.getLong("id"));
+        product.setName(resultSet.getString("name"));
+        product.setPrice(resultSet.getBigDecimal("price"));
+        product.setStock(resultSet.getInt("stock"));
+        // TODO Category id
+        product.setCategory(new Category(
+                resultSet.getLong("category_id"), resultSet.getString("category_name")));
+
+//        product.setCreatedDate(LocalDateTime.parse(resultSet.getString("createddate")));
+//        product.setUpdatedDate(LocalDateTime.parse(resultSet.getString("updateddate")));
+        return product;
     }
 
     @Override

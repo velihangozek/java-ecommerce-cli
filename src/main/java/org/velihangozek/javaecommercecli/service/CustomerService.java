@@ -28,7 +28,7 @@ public class CustomerService {
         System.out.println("Customer saved successfully!");
     }
 
-    public void login(String email, String password) throws VeloStoreException {
+    public Customer login(String email, String password) throws VeloStoreException {
         boolean customerExists = customerDAO.existByEmail(email);
 
         if (!customerExists) {
@@ -47,5 +47,6 @@ public class CustomerService {
                 throw new VeloStoreException(ExceptionMessagesConstants.CUSTOMER_PASSWORD_DOES_NOT_MATCH);
             }
         }
+        return foundCustomer;
     }
 }

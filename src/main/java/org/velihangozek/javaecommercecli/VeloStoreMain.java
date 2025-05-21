@@ -3,6 +3,7 @@ package org.velihangozek.javaecommercecli;
 import org.velihangozek.javaecommercecli.exception.ExceptionMessagesConstants;
 import org.velihangozek.javaecommercecli.exception.VeloStoreException;
 import org.velihangozek.javaecommercecli.model.Category;
+import org.velihangozek.javaecommercecli.model.Customer;
 import org.velihangozek.javaecommercecli.model.Product;
 import org.velihangozek.javaecommercecli.model.User;
 import org.velihangozek.javaecommercecli.model.enums.Role;
@@ -12,7 +13,6 @@ import org.velihangozek.javaecommercecli.service.ProductService;
 import org.velihangozek.javaecommercecli.service.UserService;
 
 import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.util.List;
 import java.util.Scanner;
 
@@ -23,6 +23,7 @@ public class VeloStoreMain {
     private static final CategoryService categoryService = new CategoryService();
     private static final ProductService productService = new ProductService();
     private static User LOGGED_IN_USER;
+    private static Customer LOGGED_IN_CUSTOMER;
 
     public static void main(String[] args) {
 
@@ -131,11 +132,13 @@ public class VeloStoreMain {
 
             System.out.println("1 - Create a new category");
             System.out.println("2 - List all categories");
-            System.out.println("3 - Delete a category by name");
+            System.out.println("3 - Delete a category by id");
             System.out.println("4 - Create a new product");
             System.out.println("5 - List all products");
-            System.out.println("6 - Delete a product by name");
-            System.out.println("7 - List all orders");
+            System.out.println("6 - Delete a product by id");
+            System.out.println("7 - Search a product");
+            System.out.println("8 - Filter products by category");
+            System.out.println("9 - List all orders");
 
             System.out.println("0 - Go back");
 
@@ -162,7 +165,13 @@ public class VeloStoreMain {
                     deleteProduct();
                     break;
                 case "7":
-                    listOrders();
+                    productSearch();
+                    break;
+                case "8":
+                    productFiltering();
+                    break;
+                case "9":
+                    orderList();
                     break;
                 case "0":
                     return;
@@ -175,7 +184,26 @@ public class VeloStoreMain {
         }
     }
 
-    private static void listOrders() {
+    private static void productFiltering() {
+
+    }
+
+    private static void productSearch() {
+        System.out.print("Enter the product name you want to search: ");
+        String searchProductName = scanner.nextLine();
+
+        List<Product> productList = productService.search(searchProductName);
+
+        System.out.print("\n========= PRODUCT SEARCH RESULTS =========\n");
+
+        productList.forEach(product ->
+                System.out.printf("%s - %s - %s\n", product.getName(), product.getPrice(), product.getCategory().getName())
+        );
+
+        System.out.println("\n========= END OF PRODUCT SEARCH RESULTS =========\n");
+    }
+
+    private static void orderList() {
     }
 
     private static void deleteProduct() {
@@ -272,10 +300,52 @@ public class VeloStoreMain {
         String password = scanner.nextLine();
 
         CustomerService customerService = new CustomerService();
-        customerService.login(email, password);
+        LOGGED_IN_CUSTOMER = customerService.login(email, password);
+
+        while (true) {
+            System.out.println("1 - List all products");
+            System.out.println("2 - Search a product");
+            System.out.println("3 - Filter products by category");
+            System.out.println("4 - Place an order");
+            System.out.println("5 - List all orders");
+
+            System.out.println("0 - Go back");
+
+            System.out.println("Please select an option: ");
+            String choice = scanner.nextLine();
+
+            switch (choice) {
+                case "1":
+                    listProducts();
+                    break;
+                case "2":
+                    productSearch();
+                    break;
+                case "3":
+                    productFiltering();
+                    break;
+                case "4":
+                    orderCreate();
+                    break;
+                case "5":
+                    orderList();
+                    break;
+                case "0":
+                    return;
+                default:
+                    System.out.println("Invalid option!");
+                    break;
+            }
+        }
+
+
+    }
+
+    private static void orderCreate() {
     }
 
     private static void registerCustomer() throws VeloStoreException {
+
         System.out.print("Please enter your name: ");
         String name = scanner.nextLine();
         System.out.print("Please enter your email: ");

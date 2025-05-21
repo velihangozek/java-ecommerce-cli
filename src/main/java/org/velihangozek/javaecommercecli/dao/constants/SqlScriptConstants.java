@@ -22,7 +22,17 @@ public class SqlScriptConstants {
             VALUES (?,?,?)
             """;
     public static final String PRODUCT_SEARCH_BY_NAME = """
-            SELECT * FROM product WHERE name LIKE ?
+            SELECT p.id AS id,
+                   p.name AS name,
+                   p.price AS price,
+                   p.stock AS stock,
+                   p.createddate AS createddate,
+                   p.updateddate AS updateddate,
+                   c.id AS category_id,
+                   c.name AS category_name 
+            FROM product p
+                   LEFT JOIN public.category c ON c.id = p.category_id 
+            WHERE p.name ILIKE ?
             """;
     public static final String PRODUCT_INSERT = """
             INSERT INTO product (name, price, stock, category_id, created_by_user, updated_by_user)
@@ -35,7 +45,9 @@ public class SqlScriptConstants {
                    p.stock AS stock,
                    c.id AS category_id,
                    c.name AS category_name
-            FROM product p, category c WHERE p.category_id = c.id
+            FROM product p, 
+                 category c 
+            WHERE p.category_id = c.id
             ORDER BY p.id ASC
             LIMIT ? OFFSET ?;
             """;
