@@ -185,6 +185,18 @@ public class VeloStoreMain {
     }
 
     private static void productFiltering() {
+        System.out.print("Enter the category name you want to filter: ");
+        String categoryName = scanner.nextLine();
+
+        List<Product> productList = productService.getAllByCategoryName(categoryName);
+
+        System.out.print("\n========= PRODUCT FILTER RESULTS =========\n");
+
+        productList.forEach(product ->
+                System.out.printf("%s - %s - %s\n", product.getName(), product.getPrice(), product.getCategory().getName())
+        );
+
+        System.out.println("\n========= END OF PRODUCT SEARCH RESULTS =========\n");
 
     }
 

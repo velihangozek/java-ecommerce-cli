@@ -33,21 +33,6 @@ public class ProductDAO implements BaseDAO<Product> {
         return productList;
     }
 
-    private Product getProduct(ResultSet resultSet) throws SQLException {
-        Product product = new Product();
-        product.setId(resultSet.getLong("id"));
-        product.setName(resultSet.getString("name"));
-        product.setPrice(resultSet.getBigDecimal("price"));
-        product.setStock(resultSet.getInt("stock"));
-        // TODO Category id
-        product.setCategory(new Category(
-                resultSet.getLong("category_id"), resultSet.getString("category_name")));
-
-//        product.setCreatedDate(LocalDateTime.parse(resultSet.getString("createddate")));
-//        product.setUpdatedDate(LocalDateTime.parse(resultSet.getString("updateddate")));
-        return product;
-    }
-
     @Override
     public void save(Product product) {
 
@@ -89,16 +74,17 @@ public class ProductDAO implements BaseDAO<Product> {
             ResultSet resultSet = preparedStatement.executeQuery();
 
             while (resultSet.next()) {
-                productList.add(
-                        new Product(
-                                resultSet.getLong("id"),
-                                resultSet.getString("name"),
-                                resultSet.getBigDecimal("price"),
-                                resultSet.getInt("stock"),
-                                new Category(
-                                        resultSet.getLong("category_id"),
-                                        resultSet.getString("category_name"))
-                        ));
+//                productList.add(
+//                        new Product(
+//                                resultSet.getLong("id"),
+//                                resultSet.getString("name"),
+//                                resultSet.getBigDecimal("price"),
+//                                resultSet.getInt("stock"),
+//                                new Category(
+//                                        resultSet.getLong("category_id"),
+//                                        resultSet.getString("category_name"))
+//                        ));
+                productList.add(getProduct(resultSet));
             }
 
 
@@ -107,6 +93,18 @@ public class ProductDAO implements BaseDAO<Product> {
         }
 
         return productList;
+    }
+
+    private Product getProduct(ResultSet resultSet) throws SQLException {
+        return
+                new Product(
+                        resultSet.getLong("id"),
+                        resultSet.getString("name"),
+                        resultSet.getBigDecimal("price"),
+                        resultSet.getInt("stock"),
+                        new Category(
+                                resultSet.getLong("category_id"),
+                                resultSet.getString("category_name")));
     }
 
     @Override
@@ -146,5 +144,28 @@ public class ProductDAO implements BaseDAO<Product> {
             e.printStackTrace();
         }
         return 0;
+    }
+
+    public List<Product> findAllByCategoryName(String categoryName) {
+
+        List<Product> productList = new ArrayList<>();
+
+        try (Connection connection = DBUtil.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(SqlScriptConstants.PRODUCT_FIND_BY_CATEGORY_NAME)) {
+
+            preparedStatement.setString(1, "%" + categoryName + "%");
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            while (resultSet.next()) {
+                productList.add(getProduct(resultSet));
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return productList;
+
     }
 }

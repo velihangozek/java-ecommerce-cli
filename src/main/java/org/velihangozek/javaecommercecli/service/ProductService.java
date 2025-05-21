@@ -46,4 +46,8 @@ public class ProductService {
     public List<Product> search(String searchProductName) {
         return productDAO.searchByName(searchProductName);
     }
+
+    public List<Product> getAllByCategoryName(String categoryName) {
+        return productDAO.findAllByCategoryName(categoryName);
+    }
 }

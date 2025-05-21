@@ -57,6 +57,17 @@ public class SqlScriptConstants {
     public static final String PRODUCT_TOTAL_PAGE_COUNT = """
             SELECT COUNT(*) FROM product 
             """;
+    public static final String PRODUCT_FIND_BY_CATEGORY_NAME = """
+            SELECT p.id    AS id,
+                   p.name  AS name,
+                   p.price AS price,
+                   p.stock AS stock,
+                   c.id    AS category_id,
+                   c.name  AS category_name
+            FROM product p
+                     JOIN category c ON p.category_id = c.id
+            WHERE c.name ILIKE ?
+            """;
     public static final String USER_INSERT = """
             INSERT INTO users (username, password, role, isactive) 
             VALUES (?,?,?,?)
@@ -78,7 +89,6 @@ public class SqlScriptConstants {
     public static final String CATEGORY_FIND_ALL = """
             SELECT * FROM category
             """;
-
 
     private SqlScriptConstants() {
     }
